@@ -47,7 +47,7 @@
 
 <div id="screen2" class="screen">
     <h1>Hi baby 💖</h1>
-    <p>I made this for you, Coco.</p>
+    <p>I made this for you, Sweetheart.</p>
     <button onclick="btnClick(event, () => nextScreen(3))">Continue</button>
 </div>
 
@@ -92,7 +92,11 @@
     <div class="envelope" id="env" onclick="openLetter(event)"></div>
     <div id="letter" class="letter">
         My Angel,<br><br>
-        There’s something about you that quietly changed my world... [Your Letter Content]<br><br>
+        There’s something about you that quietly changed my world without asking for permission. You came into my life and suddenly every ordinary days started feeling important till now, small moments started meaning more, and smiles started coming easier.<br><br>
+        I love the way your presence alone can calm my storms I don’t even talk about. Being with you feels different, like I don’t have to pretend or perform. I can just be me, and that means everything.<br><br>
+        You’ve become part of my everyday happiness. The random conversations, the laughter, you being my baby literally, being able to confide in me, the way we understand each other and willing be the best for ourselves.<br><br>
+        I appreciate the little things you probably don’t even notice: your yappy moments, your agbero moment, your sad crying moment, your patience, your energy, your heart & you yourself. You make life lighter and sometimes a pin my fine ass, Lol.<br><br>
+        Looking forward and promising to love you better and more Baby. I love you mama.<br><br>
         <b>Can i ask you a question mama?</b><br><br>
         <button onclick="btnClick(event, () => nextScreen(5))" style="background:var(--hot-pink); color:white;">Yes baby</button>
     </div>
@@ -101,7 +105,16 @@
 <div id="screen5" class="screen">
     <h1 id="qText">Will you be my Valentine? 💖</h1>
     <div id="btns"><button onclick="celebrate()">YES 💗</button></div>
-    <div id="final" style="display:none;"><h2>I love you, Coco! 💞</h2></div>
+    <button id="noBtn" onmouseover="moveNo()" onclick="btnClick(event, moveNo)">NO 🙈</button>
+    </div>
+<div id="finalSection" style="display:none; text-align:center;">
+        <h2 style="font-family:'Dancing Script'; font-size:3rem;">Yaaay!! I love you, Coco! 💞</h2>
+        <button onclick="btnClick(event, sendHeart)" style="background: var(--deep-rose); color: white;">Send a heart to Adejuwon mi? 💝</button>
+    </div>
+</div>
+
+<div id="heartFeedback" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:1001; background:white; padding:30px; border-radius:20px; text-align:center; color:var(--hot-pink);">
+    <p>Heart received by <b>Adejuwon mi</b>!</p>
 </div>
 
 <script>
@@ -162,5 +175,6 @@
 </script>
 </body>
 </html>
+
 
 
