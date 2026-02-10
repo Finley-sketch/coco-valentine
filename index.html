@@ -103,11 +103,12 @@
 </div>
 
 <div id="screen5" class="screen">
-    <h1 id="qText">Will you be my Valentine? 💖</h1>
-    <div id="btns"><button onclick="celebrate()">YES 💗</button></div>
-    <button id="noBtn" onmouseover="moveNo()" onclick="btnClick(event, moveNo)">NO 🙈</button>
+    <h1 id="questionText">Will you be my Valentine? 💖</h1>
+    <div id="btnContainer">
+        <button onclick="btnClick(event, celebrate)">YES 💗</button>
+        <button id="noBtn" onmouseover="moveNo()" onclick="btnClick(event, moveNo)">NO 🙈</button>
     </div>
-<div id="finalSection" style="display:none; text-align:center;">
+    <div id="finalSection" style="display:none; text-align:center;">
         <h2 style="font-family:'Dancing Script'; font-size:3rem;">Yaaay!! I love you, Coco! 💞</h2>
         <button onclick="btnClick(event, sendHeart)" style="background: var(--deep-rose); color: white;">Send a heart to Adejuwon mi? 💝</button>
     </div>
@@ -175,6 +176,7 @@
 </script>
 </body>
 </html>
+
 
 
 
