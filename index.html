@@ -13,22 +13,20 @@
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
         .screen { display: none; height: 100vh; width: 100vw; padding: 20px; text-align: center; justify-content: center; align-items: center; flex-direction: column; position: absolute; top: 0; left: 0; z-index: 5; }
         .active { display: flex; animation: fadeIn 0.8s ease; }
-        #countdown { font-size: 0.85rem; background: rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 20px; margin-bottom: 15px; backdrop-filter: blur(5px); }
-        button { padding: 16px 34px; margin: 14px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; color: #721c24; background: var(--letter-bg); z-index: 10; }
-        input { padding: 14px; border-radius: 25px; border: none; width: 80%; max-width: 260px; text-align: center; margin-bottom: 10px; color: #d46a8c; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; }
+        button { padding: 16px 34px; margin: 10px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; color: #721c24; background: var(--letter-bg); z-index: 10; transition: 0.2s; }
+        input { padding: 14px; border-radius: 25px; border: none; width: 80%; max-width: 260px; text-align: center; margin-bottom: 10px; color: #d46a8c; outline: none; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 15px; }
         .gallery-wrapper { width: 100%; overflow-x: auto; padding: 20px 0; -webkit-overflow-scrolling: touch; }
         .gallery-container { display: flex; gap: 20px; padding: 0 40px; width: max-content; }
         .photo-card { width: 220px; background: white; padding: 10px 10px 25px 10px; border-radius: 4px; transform: rotate(var(--r)); box-shadow: 0 8px 15px rgba(0,0,0,0.2); flex-shrink: 0; }
-        .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #eee; }
+        .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #fef0f0; }
         .photo-card p { color: #444; font-family: 'Dancing Script', cursive; font-size: 0.9rem; margin-top: 10px; }
-        .envelope { width: 280px; height: 180px; background: #d46a8c; border-radius: 0 0 10px 10px; position: relative; cursor: pointer; }
-        .envelope::before { content: ""; position: absolute; top: -80px; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-bottom: 80px solid #f08fb1; transition: 0.6s; transform-origin: bottom; }
-        .open-envelope::before { transform: rotateX(180deg); }
-        .letter { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: #fffcf9; color: var(--hot-pink); padding: 30px; width: 90%; max-width: 400px; height: 70vh; overflow-y: auto; border-radius: 15px; font-family: 'Dancing Script', cursive; z-index: 100; opacity: 0; transition: 0.8s; border: 5px solid #ffb6c1; }
+        .envelope { width: 200px; height: 130px; background: #d46a8c; border-radius: 0 0 10px 10px; position: relative; cursor: pointer; margin-top: 40px; }
+        .envelope::before { content: ""; position: absolute; top: -70px; left: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-bottom: 70px solid #f08fb1; transition: 0.6s; transform-origin: bottom; z-index: 4; }
+        .open-envelope::before { transform: rotateX(180deg); z-index: 1; }
+        .letter { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: #fffcf9; color: var(--hot-pink); padding: 30px; width: 90%; max-width: 400px; height: 70vh; overflow-y: auto; border-radius: 15px; font-family: 'Dancing Script', cursive; z-index: 100; opacity: 0; transition: 0.8s; border: 5px double #ffb6c1; }
         .letter-active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
-        .btn-pop { position: absolute; pointer-events: none; animation: popUp 0.8s forwards; z-index: 200; }
-        @keyframes popUp { 0% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.5); } }
+        #heartFeedback { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; background: white; padding: 30px; border-radius: 20px; text-align: center; color: var(--hot-pink); border: 2px solid var(--hot-pink); width: 80%; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -39,16 +37,15 @@
 </audio>
 
 <div id="screen1" class="screen active">
-    <div id="countdown">Loading...</div>
     <h1>Hey Gorgeous... 💕</h1>
     <input id="nameInput" placeholder="Enter your name..."/>
-    <button onclick="btnClick(event, checkName)">Enter</button>
+    <button onclick="checkName()">Enter</button>
 </div>
 
 <div id="screen2" class="screen">
     <h1>Hi baby 💖</h1>
     <p>I made this for you, Sweetheart.</p>
-    <button onclick="btnClick(event, () => nextScreen(3))">Continue</button>
+    <button onclick="nextScreen(3)">Continue</button>
 </div>
 
 <div id="screen3" class="screen">
@@ -84,12 +81,12 @@
             <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/dqf08siviti9wke0dlwp9/WhatsApp-Image-2026-02-08-at-19.07.25-1.jpeg?rlkey=gsy971mnx5ujb5xcey9v3d614&raw=1"><p>Forever with you Tessy. ❤️</p></div>
         </div>
     </div>
-    <button onclick="btnClick(event, () => nextScreen(4))">Touch Me</button>
+    <button onclick="nextScreen(4)">Touch Me</button>
 </div>
 
 <div id="screen4" class="screen">
     <h1>A Message for You</h1>
-    <div class="envelope" id="env" onclick="openLetter(event)"></div>
+    <div class="envelope" id="env" onclick="openLetter()"></div>
     <div id="letter" class="letter">
         My Angel,<br><br>
         There’s something about you that quietly changed my world without asking for permission. You came into my life and suddenly every ordinary days started feeling important till now, small moments started meaning more, and smiles started coming easier.<br><br>
@@ -98,8 +95,9 @@
         I appreciate the little things you probably don’t even notice: your yappy moments, your agbero moment, your sad crying moment, your patience, your energy, your heart & you yourself. You make life lighter and sometimes a pin my fine ass, Lol.<br><br>
         Looking forward and promising to love you better and more Baby. I love you mama.<br><br>
         <b>Can i ask you a question mama?</b><br><br>
-        <button onclick="btnClick(event, () => nextScreen(5))" style="background:var(--hot-pink); color:white;">Yes baby</button>
+        <button onclick="nextScreen(5)" style="background:var(--hot-pink); color:white;">Yes baby</button>
     </div>
+    <p id="tapMsg" style="margin-top:20px;">tap the envelope 💌</p>
 </div>
 
 <div id="screen5" class="screen">
@@ -108,7 +106,6 @@
         <button onclick="celebrate()">YES 💗</button>
         <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO 🙈</button>
     </div>
-    
     <div id="finalSection" style="display:none;">
         <h1 style="font-size: 3rem;">Yaaay!! 🌸</h1>
         <p>I love you, Coco! 💞</p>
@@ -147,14 +144,15 @@
 
     function openLetter() {
         document.getElementById("env").classList.add("open-envelope");
-        document.getElementById("tapMsg").style.display = "none";
+        const t = document.getElementById("tapMsg");
+        if(t) t.style.display = "none";
         setTimeout(() => document.getElementById("letter").classList.add("letter-active"), 600);
     }
 
     function moveNo() {
         const btn = document.getElementById("noBtn");
-        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
         btn.style.position = "fixed";
         btn.style.left = x + "px";
         btn.style.top = y + "px";
@@ -163,8 +161,7 @@
     function celebrate() {
         document.getElementById("questionContainer").style.display = "none";
         document.getElementById("finalSection").style.display = "block";
-        // Simple confetti effect using bg particles
-        for(let i=0; i<20; i++) { setTimeout(createBgSnow, i*100); }
+        for(let i=0; i<30; i++) { setTimeout(createBgSnow, i*100); }
     }
 
     function sendHeart() {
@@ -187,6 +184,7 @@
 </script>
 </body>
 </html>
+
 
 
 
