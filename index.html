@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>For Coco 💗</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-pink: #ff85a1;
+            --deep-rose: #d46a8c;
+            --hot-pink: #ff1493;
+            --text-main: #ffffff;
+            --letter-bg: #fffcf9;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: var(--text-main);
+            height: 100vh;
+            position: relative;
+        }
+
+        .bg-particle {
+            position: absolute;
+            top: -50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 5;
+        }
+        .active { display: flex; animation: fadeIn 0.8s ease; }
+
+        #countdown {
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        button {
+            position: relative;
+            padding: 16px 34px;
+            margin: 14px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            color: #721c24;
+            background: var(--letter-bg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        input {
+            padding: 14px;
+            border-radius: 25px;
+            border: none;
+            width: 80%;
+            max-width: 260px;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 10px;
+            outline: none;
+            color: #d46a8c;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 10px; }
+
+        .gallery-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding: 20px 0;
+            scrollbar-width: none;
+        }
+        .gallery-wrapper::-webkit-scrollbar { display: none; }
+
+        .gallery-container {
+            display: flex;
+            gap: 20px;
+            padding: 0 40px;
+            width: max-content;
+        }
+        
+        .photo-card {
+            width: 240px;
+            background: white;
+            padding: 12px 12px 30px 12px;
+            border-radius: 4px;
+            transform: rotate(var(--r));
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+        .photo-card img { width: 100%; aspect-ratio: 1/1.2; object-fit: cover; }
+        .photo-card p { color: #444; font-family: 'Dancing Script', cursive; font-size: 1rem; margin-top: 15px; }
+
+        .envelope-wrapper { 
+            position: relative; 
+            height: 180px; width: 280px; 
+            margin: 20px auto; cursor: pointer;
+        }
+        .envelope { 
+            width: 100%; height: 100%; 
+            background: #d46a8c; border-radius: 0 0 10px 10px; 
+            position: relative; z-index: 2; 
+        }
+        .envelope::before {
+            content: ""; position: absolute; top: -80px; left: 0;
+            border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-bottom: 80px solid #f08fb1; z-index: 4; transition: 0.6s; transform-origin: bottom;
+        }
+        .open-envelope::before { transform: rotateX(180deg); z-index: 1; }
+
+        .letter {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #fffcf9;
+            color: var(--hot-pink);
+            padding: 30px;
+            width: 90%; max-width: 400px;
+            height: 80vh; overflow-y: auto;
+            border-radius: 15px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem; line-height: 1.5;
+            text-align: left; z-index: 100;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 8px double #ffb6c1;
+            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0; pointer-events: none;
+        }
+        .letter-active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
+
+        .btn-pop { position: absolute; pointer-events: none; animation: popUp 0.8s ease-out forwards; z-index: 200; }
+        @keyframes popUp { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.5); } }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body onclick="playMusicOnce()">
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://www.dropbox.com/scl/fi/9vxj8by5o1phbe2exu16b/Ebunife-Ian-______________-Event-Planner-Videographer-Photographer-MUA-Gele-DJ-Band-_____________-1.mp3?rlkey=p1a68l6lp0amqjae9a20jnt5k&st=kk33hawb&dl=1" type="audio/mpeg">
+</audio>
+
+<div id="screen1" class="screen active">
+    <div id="countdown">Loading Valentine's...</div>
+    <h1>Hey Gorgeous... 💕</h1>
+    <input id="nameInput" placeholder="Enter your name..."/>
+    <button onclick="btnClick(event, () => checkName())">Enter</button>
+    <p id="errorMsg" style="color:#ffd6ec; margin-top:10px; font-weight: bold;"></p>
+</div>
+
+<div id="screen2" class="screen">
+    <h1>Hi baby 💖</h1>
+    <p>I made this for you, Coco.</p>
+    <button onclick="btnClick(event, () => nextScreen(3))">Continue</button>
+</div>
+
+<div id="screen3" class="screen">
+    <h1>Our Memories</h1>
+    <div class="gallery-wrapper">
+        <div class="gallery-container">
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/q123h5pmbaqhachqlxek3/j.jpeg?rlkey=5k0df48clowb857u3hz39dx3x&st=gcb8f9t8&dl=1"><p>Where it all started☺️</p></div>
+            <div class="photo-card" style="--r:3deg"><img src="https://www.dropbox.com/scl/fi/rqbiioswbhf9yvzgfm92j/WhatsApp-Image-2026-02-08-at-19.02.29.jpeg?rlkey=81xg764htyq4nhnjei1e0vppd&st=be06wcht&dl=1"><p>First Official Outing Together</p></div>
+            <div class="photo-card" style="--r:-1deg"><img src="https://www.dropbox.com/scl/fi/jnz0y4kaciaq6xyqtmfbm/WhatsApp-Image-2026-02-08-at-19.02.30.jpeg?rlkey=2uz148sf6dlsftrs5lvf9lm06&st=4758eefm&dl=1"><p>My hot model baby</p></div>
+            <div class="photo-card" style="--r:2deg"><img src="https://www.dropbox.com/scl/fi/r3nfibnotb9km9yj563j7/WhatsApp-Image-2026-02-08-at-19.07.26-3.jpeg?rlkey=bmlj5i7lwlvnyqzp1yb296hyu&st=skqcpdnm&dl=1"><p>Ya tall here oh 😂</p></div>
+            <div class="photo-card" style="--r:-3deg"><img src="https://www.dropbox.com/scl/fi/w6b9z083faxipexduc30g/WhatsApp-Image-2026-02-08-at-19.07.30.jpeg?rlkey=c54w8ilc547khr8fv91kw89k5&st=4ufvvx8s&dl=1"><p>Best picture of my angel 🤭</p></div>
+            <div class="photo-card" style="--r:1deg"><img src="https://www.dropbox.com/scl/fi/psfg6ntltwka2qg99tsf0/WhatsApp-Image-2026-02-08-at-19.07.33.jpeg?rlkey=m4uwi8ms9y0ju1hy052gxxe0t&st=sw3wnzrw&dl=1"><p>Aronjeyo of Africa 😂</p></div>
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/4c9mjqizpabhcrt2pvw1p/WhatsApp-Image-2026-02-08-at-19.07.32-1.jpeg?rlkey=nzmlmxn8ntci7pkmx8n5wd562&st=3ztyx5ik&dl=1"><p>Grateful for the small Legs!</p></div>
+            <div class="photo-card" style="--r:3deg"><img src="https://www.dropbox.com/scl/fi/yoe8vpxwaqqwk5fulhmes/WhatsApp-Image-2026-02-08-at-19.07.32.jpeg?rlkey=s9xw0ae4temkp7qo8n4eqyq45&st=q452xkr6&dl=1"><p>I love you better.</p></div>
+            <div class="photo-card" style="--r:-1deg"><img src="https://www.dropbox.com/scl/fi/c6tcl7tq12fkg32g5qa68/WhatsApp-Image-2026-02-08-at-19.07.28-2.jpeg?rlkey=4wjr0fig4u9m8nmeiyzuzfa8i&st=b3ioykoo&dl=1"><p>My favorite Snack till RIP 😍.</p></div>
+            <div class="photo-card" style="--r:2deg"><img src="https://www.dropbox.com/scl/fi/fjggb3y6xr94e1nr5o49k/WhatsApp-Image-2026-02-08-at-19.07.25.jpeg?rlkey=p585iwdr5m24t13btn7lrgxkd&st=q8612pes&dl=1"><p>Stole my heart with this 🤤</p></div>
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/e1ar4qjmqcvufm7h9faxz/WhatsApp-Image-2026-02-08-at-19.07.27-1.jpeg?rlkey=nf5znqh8rzeus1p1ydfzn1ing&st=stosi2h0&dl=1"><p>Brown skin girl ma!</p></div>
+            <div class="photo-card" style="--r:3deg"><img src="https://www.dropbox.com/scl/fi/alc9djdtmbxyyzxr8vcan/WhatsApp-Image-2026-02-08-at-19.07.26-2.jpeg?rlkey=zvm6r928td2u58b6lh7dx6rkm&st=55njakb3&dl=1"><p>African Queen herself.</p></div>
+            <div class="photo-card" style="--r:-1deg"><img src="https://www.dropbox.com/scl/fi/5i4ntiazpp2aa84qdqvw2/WhatsApp-Image-2026-02-08-at-19.07.26.jpeg?rlkey=4jzco9o9oojxzqn4u9h0y6xl2&st=ezorr8il&dl=1"><p>Coco My Love 😍</p></div>
+            <div class="photo-card" style="--r:2deg"><img src="https://www.dropbox.com/scl/fi/x2hkw1fgj5wr0wcluf5en/WhatsApp-Image-2026-02-08-at-19.07.27-3.jpeg?rlkey=gh8k9lbybxrr388wgcaqrypwg&st=ipvoyfsn&dl=1"><p>Favorite Baby Bully!</p></div>
+            <div class="photo-card" style="--r:-3deg"><img src="https://www.dropbox.com/scl/fi/nqfcvttp078b1xkj1cqj8/WhatsApp-Image-2026-02-08-at-19.07.30-1.jpeg?rlkey=7vs36ylcoy9z4khgw09jfqxt7&st=pwn0131k&dl=1"><p>Personal Yapper 😂😘</p></div>
+            <div class="photo-card" style="--r:1deg"><img src="https://www.dropbox.com/scl/fi/lf7r9jtfdporjj5pjmcgt/WhatsApp-Image-2026-02-08-at-19.07.33-1.jpeg?rlkey=ra5jsmurjpmvraw17f7gv866j&st=xo7zabfl&dl=1"><p>My happy pill 😂</p></div>
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/g4jsysgbil6dfax569izn/WhatsApp-Image-2026-02-08-at-19.07.33-2.jpeg?rlkey=sd7nxxa9dbc2o70wtleuovguz&st=uh7rfqvk&dl=1"><p>Sun felt Jealous 🤭</p></div>
+            <div class="photo-card" style="--r:3deg"><img src="https://www.dropbox.com/scl/fi/g4jsysgbil6dfax569izn/WhatsApp-Image-2026-02-08-at-19.07.33-2.jpeg?rlkey=sd7nxxa9dbc2o70wtleuovguz&st=uh7rfqvk&dl=1"><p>Innocent till hungry 😂</p></div>
+            <div class="photo-card" style="--r:-1deg"><img src="https://www.dropbox.com/scl/fi/2ah3i4xdmtx49ox4f7bq5/WhatsApp-Image-2026-02-08-at-19.02.32.jpeg?rlkey=nqnbooew7at40btg2o6rtotqm&st=z2ysualu&dl=1"><p>Who Pls?</p></div>
+            <div class="photo-card" style="--r:2deg"><img src="https://www.dropbox.com/scl/fi/po7ke92rsfgn6nsbw82mo/WhatsApp-Image-2026-02-08-at-19.07.24.jpeg?rlkey=85p1drdoxbbkvgsr83qt5u43e&st=dvwz4vl8&dl=1"><p>Style body Joor.</p></div>
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/tfmnqja8bv611mb5xmkpz/WhatsApp-Image-2026-02-08-at-19.07.25-2.jpeg?rlkey=udzpxqqz9bkbrvifg8snkjpb3&st=iv89qrkt&dl=1"><p>Beauty right here.</p></div>
+            <div class="photo-card" style="--r:3deg"><img src="https://www.dropbox.com/scl/fi/nqfcvttp078b1xkj1cqj8/WhatsApp-Image-2026-02-08-at-19.07.30-1.jpeg?rlkey=7vs36ylcoy9z4khgw09jfqxt7&st=6dk1ewmh&dl=1"><p>Turn me on? 🤷‍♂️</p></div>
+            <div class="photo-card" style="--r:-1deg"><img src="https://www.dropbox.com/scl/fi/kohf9thskdy4pihj24ink/WhatsApp-Image-2026-02-08-at-19.07.25-3.jpeg?rlkey=m749pd0sdmjrf0ix5j1fkxkw2&st=81rrl75b&dl=1"><p>Marry you already 🤭</p></div>
+            <div class="photo-card" style="--r:2deg"><img src="https://www.dropbox.com/scl/fi/7o321hhjfrpzzw89x6986/WhatsApp-Image-2026-02-08-at-19.07.30-2.jpeg?rlkey=2ydi2iw15oyhnejqzmjx81lay&st=wfkl6be2&dl=1"><p>Achievers all the way!</p></div>
+            <div class="photo-card" style="--r:-3deg"><img src="https://www.dropbox.com/scl/fi/a7um41wwy2nvh2xddryds/WhatsApp-Image-2026-02-08-at-19.07.28-1.jpeg?rlkey=h3v2zxkub746yt1g1bx0jbzrv&st=q5v35dgc&dl=1"><p>AURA HERSELF 🙌💕</p></div>
+            <div class="photo-card" style="--r:1deg"><img src="https://www.dropbox.com/scl/fi/9skizivb2md8oef61n93m/WhatsApp-Image-2026-02-08-at-19.07.26-1.jpeg?rlkey=l65oonlw9z5nsk6208lw6txfd&st=wa6jwcct&dl=1"><p>Angel by any chance?</p></div>
+            <div class="photo-card" style="--r:-2deg"><img src="https://www.dropbox.com/scl/fi/dqf08siviti9wke0dlwp9/WhatsApp-Image-2026-02-08-at-19.07.25-1.jpeg?rlkey=gsy971mnx5ujb5xcey9v3d614&st=i603lg64&dl=1"><p>Forever with you. ❤️</p></div>
+        </div>
+    </div>
+    <button onclick="btnClick(event, () => nextScreen(4))">Touch Me</button>
+</div>
+
+<div id="screen4" class="screen">
+    <h1>A Message for You</h1>
+    <div class="envelope-wrapper" onclick="openLetter(event)">
+        <div class="envelope" id="env"></div>
+    </div>
+    <div id="letter" class="letter">
+        My Angel,<br><br>
+        There’s something about you that quietly changed my world without asking for permission. You came into my life and suddenly every ordinary days started feeling important till now, small moments started meaning more, and smiles started coming easier.<br><br>
+        I love the way your presence alone can calm my storms I don’t even talk about. Being with you feels different, like I don’t have to pretend or perform. I can just be me, and that means everything.<br><br>
+        You’ve become part of my everyday happiness. The random conversations, the laughter, you being my baby literally, being able to confide in me, the way we understand each other and willing be the best for ourselves.<br><br>
+        I appreciate the little things you probably don’t even notice: your yappy moments, your agbero moment, your sad crying moment, your patience, your energy, your heart & you yourself. You make life lighter and sometimes a pin my fine ass, Lol.<br><br>
+        Looking forward and promising to love you better and more Baby. I love you mama.<br><br>
+        <b>Can i ask you a question mama with love?</b><br><br>
+        <button onclick="btnClick(event, () => nextScreen(5))" style="background:var(--hot-pink); color:white;">Yes baby go ahead</button>
+    </div>
+    <p id="tapText" style="margin-top:20px; font-family: 'Dancing Script'; font-size: 1.5rem;">tap me 💌</p>
+</div>
+
+<div id="screen5" class="screen">
+    <h1 id="questionText">Will you be my Valentine? 💖</h1>
+    <div id="btnContainer">
+        <button onclick="btnClick(event, celebrate)">YES 💗</button>
+        <button id="noBtn" onmouseover="moveNo()" onclick="btnClick(event, moveNo)">NO 🙈</button>
+    </div>
+    <div id="finalSection" style="display:none; text-align:center;">
+        <h2 style="font-family:'Dancing Script'; font-size:3rem;">Yaaay!! I love you, Coco! 💞</h2>
+        <button onclick="btnClick(event, sendHeart)" style="background: var(--deep-rose); color: white;">Send a heart to Adejuwon mi? 💝</button>
+    </div>
+</div>
+
+<div id="heartFeedback" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:1001; background:white; padding:30px; border-radius:20px; text-align:center; color:var(--hot-pink);">
+    <p>Heart received by <b>Adejuwon mi</b>!</p>
+</div>
+
+<script>
+    let musicPlayed = false;
+    const bgMusic = document.getElementById('bgMusic');
+
+    function playMusicOnce() {
+        if(!musicPlayed) {
+            bgMusic.play().catch(e => console.log("User interaction required"));
+            musicPlayed = true;
+        }
+    }
+
+    function createBgSnow() {
+        const p = document.createElement("div");
+        p.classList.add("bg-particle");
+        p.innerHTML = ["💖", "🌸", "🤍", "🌹"][Math.floor(Math.random() * 4)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.fontSize = (Math.random() * 20 + 10) + "px";
+        p.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        p.style.opacity = Math.random();
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 10000);
+    }
+    setInterval(createBgSnow, 300);
+
+    function btnClick(e, callback) {
+        playMusicOnce();
+        createButtonPop(e);
+        setTimeout(callback, 300);
+    }
+
+    function createButtonPop(e) {
+        for(let i=0; i<8; i++) {
+            const p = document.createElement("div");
+            p.innerHTML = "❤️";
+            p.classList.add("btn-pop");
+            p.style.left = e.clientX + "px";
+            p.style.top = e.clientY + "px";
+            p.style.setProperty('--x', (Math.random() * 200 - 100) + "px");
+            p.style.setProperty('--y', (Math.random() * 200 - 100) + "px");
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 800);
+        }
+    }
+
+    function checkName() {
+        let v = document.getElementById("nameInput").value.trim().toLowerCase();
+        if(v === "coco") {
+            nextScreen(2);
+        } else {
+            document.getElementById("errorMsg").innerText = "Try harder baby! 💗";
+        }
+    }
+
+    function nextScreen(n) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen' + n).classList.add('active');
+    }
+
+    function openLetter(e) {
+        createButtonPop(e);
+        document.getElementById("env").classList.add("open-envelope");
+        setTimeout(() => {
+            document.getElementById("letter").classList.add("letter-active");
+            document.getElementById("tapText").style.display = "none";
+        }, 600);
+    }
+
+    function moveNo() {
+        let b = document.getElementById("noBtn");
+        let x = Math.random() * (window.innerWidth - b.offsetWidth);
+        let y = Math.random() * (window.innerHeight - b.offsetHeight);
+        b.style.position = "fixed"; b.style.left = x + "px"; b.style.top = y + "px";
+    }
+
+    function celebrate() {
+        document.getElementById("questionText").style.display = "none";
+        document.getElementById("btnContainer").style.display = "none";
+        document.getElementById("finalSection").style.display = "block";
+    }
+
+    function sendHeart() {
+        document.getElementById("heartFeedback").style.display = "block";
+        setTimeout(() => document.getElementById("heartFeedback").style.display = "none", 3000);
+    }
+
+    function updateCountdown() {
+        const target = new Date("February 14, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+        if (diff < 0) { document.getElementById("countdown").innerHTML = "Happy Valentine's Day! ❤️"; return; }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${mins}m until V-Day 🌹`;
+    }
+    setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
