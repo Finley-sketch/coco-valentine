@@ -119,35 +119,56 @@
 </div>
 
 <script>
-    let audioStarted = false;
+    let musicPlayed = false;
     const bgMusic = document.getElementById('bgMusic');
 
     function initAudio() {
-        if (!audioStarted) {
-            bgMusic.play();
-            audioStarted = true;
+        if(!audiostarted) {
+            bgMusic.play().catch(e => console.log("User interaction required"));
+            audiostarted = true;
         }
     }
 
     function createBgSnow() {
         const p = document.createElement("div");
-        p.className = "bg-particle";
+        p.classList.add("bg-particle");
         p.innerHTML = ["💖", "🌸", "🤍", "🌹"][Math.floor(Math.random() * 4)];
         p.style.left = Math.random() * 100 + "vw";
         p.style.fontSize = (Math.random() * 20 + 10) + "px";
         p.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        p.style.opacity = Math.random();
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 10000);
     }
     setInterval(createBgSnow, 300);
 
     function btnClick(e, callback) {
-        initAudio();
-        callback();
+        playMusicOnce();
+        createButtonPop(e);
+        setTimeout(callback, 300);
+    }
+
+    function createButtonPop(e) {
+        for(let i=0; i<8; i++) {
+            const p = document.createElement("div");
+            p.innerHTML = "❤️";
+            p.classList.add("btn-pop");
+            p.style.left = e.clientX + "px";
+            p.style.top = e.clientY + "px";
+            p.style.setProperty('--x', (Math.random() * 200 - 100) + "px");
+            p.style.setProperty('--y', (Math.random() * 200 - 100) + "px");
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 800);
+        }
     }
 
     function checkName() {
-        if(document.getElementById("nameInput").value.trim().toLowerCase() === "coco") nextScreen(2);
+        let v = document.getElementById("nameInput").value.trim().toLowerCase();
+        if(v === "coco") {
+            nextScreen(2);
+        } else {
+            document.getElementById("errorMsg").innerText = "Try harder baby! 💗";
+        }
     }
 
     function nextScreen(n) {
@@ -156,24 +177,49 @@
     }
 
     function openLetter(e) {
+        createButtonPop(e);
         document.getElementById("env").classList.add("open-envelope");
-        setTimeout(() => document.getElementById("letter").classList.add("letter-active"), 600);
+        setTimeout(() => {
+            document.getElementById("letter").classList.add("letter-active");
+            document.getElementById("tapText").style.display = "none";
+        }, 600);
+    }
+
+    function moveNo() {
+        const btn = document.getElementById("noBtn");
+        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        btn.style.position = "fixed";
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
     }
 
     function celebrate() {
-        document.getElementById("qText").style.display = "none";
-        document.getElementById("btns").style.display = "none";
-        document.getElementById("final").style.display = "block";
+        document.getElementById("questionContainer").style.display = "none";
+        document.getElementById("finalSection").style.display = "block";
+        // Simple confetti effect using bg particles
+        for(let i=0; i<20; i++) { setTimeout(createBgSnow, i*100); }
+    }
+
+    function sendHeart() {
+        const fb = document.getElementById("heartFeedback");
+        fb.style.display = "block";
+        setTimeout(() => fb.style.display = "none", 3000);
     }
 
     function updateCountdown() {
-        const diff = new Date("February 14, 2026").getTime() - new Date().getTime();
+        const target = new Date("February 14, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+        if (diff < 0) { document.getElementById("countdown").innerHTML = "Happy Valentine's Day! ❤️"; return; }
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        document.getElementById("countdown").innerHTML = `${days}d ${hours}h until V-Day 🌹`;
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${mins}m until V-Day 🌹`;
     }
     setInterval(updateCountdown, 1000);
 </script>
+
 </body>
 </html>
 
